@@ -1,47 +1,30 @@
 """
 Telegram Guruh Spam Filter Bot
 ================================
+O'rnatish:
+    pip install python-telegram-bot==20.7
+
 Ishlatish:
     1. @BotFather dan bot yarating, TOKEN oling
-    2. .env faylga BOT_TOKEN ni yozing
+    2. BOT_TOKEN ga yozing
     3. Botni guruhga ADMIN qiling (xabar o'chirish huquqi bilan)
     4. python spam_filter_bot.py
 """
 
-import sys
-import subprocess
-
-def install_requirements():
-    required = {
-        "python-telegram-bot[job-queue]": "20.7",
-        "python-dotenv": "1.0.1",
-    }
-    for package, version in required.items():
-        pkg_with_version = f"{package}=={version}"
-        print(f"O'rnatilmoqda: {pkg_with_version} ...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", pkg_with_version, "-q"])
-    print("Barcha kutubxonalar tayyor!\n")
-
-install_requirements()
-
 import re
 import logging
-import os
-from dotenv import load_dotenv
 from telegram import Update, ChatPermissions
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 from datetime import datetime, timedelta
 
-# .env fayldan o'zgaruvchilarni yuklash
-load_dotenv()
+# ============================================================
+# SOZLAMALAR
+# ============================================================
+BOT_TOKEN = "SIZNING_BOT_TOKEN_INGIZ"   # @BotFather dan oling
 
-# ============================================================
-# SOZLAMALAR (.env fayldan o'qiladi)
-# ============================================================
-BOT_TOKEN             = os.getenv("BOT_TOKEN", "")
-BAN_AFTER_WARNINGS    = int(os.getenv("BAN_AFTER_WARNINGS", 3))
-MUTE_DURATION_MINUTES = int(os.getenv("MUTE_DURATION_MINUTES", 60))
-IGNORE_ADMINS         = os.getenv("IGNORE_ADMINS", "true").lower() == "true"
+BAN_AFTER_WARNINGS    = 3     # Necha marta ogohlantirish keyin ban
+MUTE_DURATION_MINUTES = 60   # Mute qilish vaqti (daqiqa), 0 = to'g'ridan ban
+IGNORE_ADMINS         = True  # Adminlarni tekshirmasin
 
 ALLOWED_DOMAINS = [
     # "yoursite.com",  # Ruxsat etilgan domenlar (izohni olib tashlang)
