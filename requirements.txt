@@ -1,0 +1,2 @@
+python-telegram-bot[ish navbati]==20.7
+python-dotenv==1.0.1
